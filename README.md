@@ -1,5 +1,5 @@
 
-# 🚴‍♂️ Bike Shop Backend
+# 🚴‍♂️ Bi Cycle Store Backend
 
 - The backend server for the Bike Shop Application built with Node.js, Express, and MongoDB. It provides RESTful APIs for authentication, product and order management, user role-based access, and payment integration via SurjoPay.
 
