@@ -25,15 +25,19 @@
     - Customer: View orders, manage profile & update password
 - Order placement with SurjoPay integration
 
-## 🛒 🔄 Extras
+##  🔄 Extras
 - Track order status (progress bar)
 - Admin control to update delivery status and estimated date
 - Pagination on product and order listings
 
-## 🛒 🧰 Tech Stack
+## 🧰 Tech Stack
 - Node.js
 
 - Express.js
+  
+- Typescript
+  
+- zod for validation 
 
 - MongoDB + Mongoose
 
@@ -91,8 +95,7 @@ bike-shop-backend/
  1. Clone the repo:
 
 ```bash
-git clone https://github.com/your-username/bike-shop-client.git
-cd bike-shop-client
+git clone https://github.com/ZakiaSultana4/Bi-Cycle-Store-Backend
 
 ```
 2. Install dependencies:
@@ -105,7 +108,7 @@ npm install
 4. Run the development server:
 
 ```bash
-npm run dev
+npm run start:dev
 
 ```
     
@@ -160,7 +163,7 @@ Adjust values according to your backend and SurjoPay credentials.
 - JWT Authentication: Secures protected routes via middleware.
 - Role-Based Access Control:
     - `customer`: Can view and place orders, manage profile.
-    - `admin`: Can manage users, orders, and products..
+    - `admin`: Can manage users, orders, and products.
 # 🗃️ Database Schema Overview
 ## 🔸 User
 ```bash
