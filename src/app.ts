@@ -11,7 +11,7 @@ const app: Application = express();
 // Middleware setup
 app.use(express.json());
 app.use(cors({
-  origin: 'https://bycycle-client.vercel.app', // Frontend URL
+  origin: ['https://bycycle-client.vercel.app', 'http://localhost:5173'], // Frontend URL
   credentials: true,              // Allow sending cookies
 }));
 app.use(cookieParser());

@@ -25,42 +25,48 @@ class QueryBuilder<T> {
 
     return this;
   }
+filter() {
+  const queryObj = { ...this.query };
 
-  filter() {
-    const queryObj = { ...this.query }; // Copy query object
-  
-    // Fields to exclude from direct filtering
-    const excludeFields = [
-      "searchTerm",
-      "sort",
-      "limit",
-      "page",
-      "fields",
-      "minPrice",
-      "maxPrice",
-    ];
-    excludeFields.forEach((el) => delete queryObj[el]);
-  
-    // Numeric filtering (minPrice & maxPrice)
-    const priceFilter: Record<string, any> = {}; // Explicitly define as a generic object
-  
-    if (this.query.minPrice) {
-      priceFilter["price"] = { $gte: Number(this.query.minPrice) };
+  const excludeFields = [
+    "searchTerm",
+    "sort",
+    "limit",
+    "page",
+    "fields",
+    "minPrice",
+    "maxPrice",
+  ];
+  excludeFields.forEach((el) => delete queryObj[el]);
+
+  // Initialize final filter object that will be passed to find()
+  const finalFilter: Record<string, any> = { ...queryObj };
+
+
+  // Validate riderType and add if valid
+  if (queryObj.riderType) {
+    const validRiderTypes = ["Men", "Women", "Kids"];
+    if (validRiderTypes.includes(queryObj.riderType as string)) {
+      finalFilter.riderType = queryObj.riderType;
+    } else {
+      // Invalid riderType, remove it
+      delete finalFilter.riderType;
     }
-    if (this.query.maxPrice) {
-      priceFilter["price"] = {
-        ...priceFilter["price"],
-        $lte: Number(this.query.maxPrice),
-      };
-    }
-  
-    this.modelQuery = this.modelQuery.find({
-      ...queryObj,
-      ...priceFilter,
-    } as FilterQuery<T>);
-  
-    return this;
   }
+
+  // Numeric filtering (price)
+  if (this.query.minPrice || this.query.maxPrice) {
+    finalFilter.price = {};
+    if (this.query.minPrice) finalFilter.price.$gte = Number(this.query.minPrice);
+    if (this.query.maxPrice) finalFilter.price.$lte = Number(this.query.maxPrice);
+  }
+
+  this.modelQuery = this.modelQuery.find(finalFilter as FilterQuery<T>);
+
+  return this;
+}
+
+
   
 
   sort() {

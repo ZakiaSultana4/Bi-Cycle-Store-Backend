@@ -9,9 +9,11 @@ const createBike = async (payload: IBike): Promise<IBike> => {
   return result;
 };
 
-// create this service for get all bike
+// Service to get all bikes with search, filter, sort, pagination, and field selection
 const getBikes = async (query: Record<string, unknown>) => {
-  const searchableFields = ['model','description', 'category' ,'brand', 'name'];
+  const searchableFields = ["model", "description", "category", "brand", "name"];
+
+  // Initialize QueryBuilder with the base Bike query and query params
   const bikeQuery = new QueryBuilder(Bike.find(), query)
     .search(searchableFields)
     .filter()
@@ -19,13 +21,16 @@ const getBikes = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
-    const result = await bikeQuery.modelQuery;
-    const meta = await bikeQuery.countTotal();
-    // console.log(result,meta,"test")
-    return {
-      meta,
-      result,
-    };
+  // Execute the query to get results
+  const result = await bikeQuery.modelQuery.exec();
+
+  // Get total count and pagination meta info
+  const meta = await bikeQuery.countTotal();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 // create this service for get a Specific  bike

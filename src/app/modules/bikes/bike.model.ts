@@ -2,7 +2,17 @@ import { model, Schema } from 'mongoose';
 import { IBike } from './bike.interface';
 
 const bikeSchema = new Schema<IBike>(
-  { image: { type: String, trim: true, required: [true, 'Image is Required'] },
+  {
+    image: {
+      type: [String], // change from String to array of strings
+      required: [true, 'At least one image is required'],
+      validate: {
+        validator: function (val: string[]) {
+          return Array.isArray(val) && val.length > 0;
+        },
+        message: 'Image array must have at least one image',
+      },
+    },
     name: { type: String, trim: true, required: [true, 'Name is Required'] },
     brand: {
       type: String,
@@ -11,7 +21,7 @@ const bikeSchema = new Schema<IBike>(
     },
     price: {
       type: Number,
-      min: [0, 't can not be less than 0 '],
+      min: [0, 'It can not be less than 0 '],
       required: [true, 'Bike price is Required '],
     },
     category: {
@@ -21,6 +31,12 @@ const bikeSchema = new Schema<IBike>(
         message: '{VALUE} is not a valid category',
       },
     },
+    riderType: {
+      type: String,
+      enum: ["Men", "Women", "Kids"],
+      required: [true, "Rider type is required"],
+    },
+
     model: {
       type: String,
       trim: true,
@@ -33,21 +49,19 @@ const bikeSchema = new Schema<IBike>(
     },
     quantity: {
       type: Number,
-      min: [0, 'quantity can not be less than 0 '],
-      required: [true, 'Quantity of the bike Required'],
+      min: [0, 'Quantity can not be less than 0 '],
+      required: [true, 'Quantity of the bike is required'],
     },
     inStock: {
       type: Boolean,
-      required: [true, 'inStock value will be true or false'],
+
       default: true,
     },
   },
   {
-    // it automatic add two field 1.updatedAt 2.createdAt
     timestamps: true,
     toJSON: {
       transform: function (doc, ret) {
-        // Exclude the __v field
         delete ret.__v;
       },
     },
